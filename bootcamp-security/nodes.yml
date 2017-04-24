@@ -75,7 +75,7 @@
       git:
         repo: https://github.com/nishimunea/bootcampsns.git
         dest: /var/www/app/sns
-        clone: yes
+        clone: no
 
     - name: Bundle Install
       shell: bundle install chdir=/var/www/app/sns
