@@ -50,6 +50,7 @@
     - name: Create Directory
       file:
         path: /var/www/app
+        state: directory
         owner: www-data
         group: www-data
         mode: 0755
