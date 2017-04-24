@@ -64,6 +64,8 @@
       copy:
         src: files/my.cnf
         dest: /etc/mysql/my.cnf
+
+    - name: Restart mysql
       service:
         name: mysql
         state: restarted
