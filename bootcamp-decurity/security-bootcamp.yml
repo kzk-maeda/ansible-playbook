@@ -1,0 +1,123 @@
+- name: Configure Bootcamp Environment 2017
+  hosts: nodes
+  become: True
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+
+    - name: Service nginx enable
+      service:
+        name: nginx
+        enabled: yes
+
+    - name: Install php-fpm
+      apt:
+        name: php-fpm
+        state: latest
+
+    - name: Install mysql packages
+      apt: name={{ item }} state=installed
+      with_items:
+        - mysql-server
+        - libmysqlclient-dev
+
+    - name: Add apt repository
+      apt_repository: repo='ppa:brightbox/ruby-ng'
+
+    - name: Install other packages
+      apt: name={{ item }} state=installed
+      with_items:
+        - ruby2.3
+        - ruby2.3-dev
+        - ruby-bundler
+        - nodejs
+        - libcurl4-openssl-dev
+        - apache2-dev
+        - libapr1-dev
+        - libaprutil1-dev
+        - libxml2
+        - libxslt-dev
+        - build-essential
+        - patch
+        - libmysqlclient-dev
+        - libmagickwand-dev
+        - imagemagick
+        - libsqlite3-dev
+
+    - name: Create Directory
+      file:
+        path: /var/www/app
+        owner: www-data
+        group: www-data
+        mode: 0755
+
+    - name: Create User (bootcamp2017)
+      user:
+        name: bootcamp2017
+        group: www-data
+        password: bootcamp2017!!
+
+    - name: Copy mysql.cnf
+      copy:
+        src: files/my.cnf
+        dest: /etc/mysql/my.cnf
+      service:
+        name: mysql
+        state: restarted
+
+    - name: Git clone app code
+      git:
+        repo: https://github.com/nishimunea/bootcampsns.git
+        dest: /var/www/app/sns
+        clone: yes
+
+    - name: Bundle Install
+      shell: bundle install chdir=/var/www/app/sns
+
+    - name: Rake DB Create (ENV=production)
+      shell: rake db:create RAILS_ENV=production chdir=/var/www/app/sns
+
+    - name: Rake DB Migrate (ENV=production)
+      shell: rake db:migrate RAILS_ENV=production chdir=/var/www/app/sns
+
+    - name: Copy unicorn.rb
+      copy:
+        src: files/unicorn.rb
+        dest: /var/www/app/sns/config/unicorn.rb
+
+    - name: Start unicoen
+      shell: bundle exec unicorn_rails -c config/unicorn.rb -E production -D chdir=/var/www/app/sns
+
+    - name: Copy init.d/unicorn (unicorn start shell)
+      copy:
+        src: files/unicorn
+        dest: /etc/init.d/unicorn
+
+    - name: Add execution right to unicorn
+      file:
+        path: /etc/init.d/unicorn
+        mode: 0755
+
+    - name: Reload daemon
+      shell: systemctl daemon-reload
+
+    - name: update unicorn
+      shell: update-rc.d unicorn defaults
+
+    - name: Copy nginx config file (/etc/nginx/sites-enabled/default)
+      copy:
+        src: files/sites-enabled_default
+        dest: /etc/nginx/sites-enabled/default
+
+    - name: Copy nginx config file (/etc/nginx/nginx.conf)
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+
+    -name: Restart nginx service
+      service:
+        name: nginx
+        state: restarted
