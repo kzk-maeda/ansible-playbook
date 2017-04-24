@@ -117,7 +117,7 @@
         src: files/nginx.conf
         dest: /etc/nginx/nginx.conf
 
-    -name: Restart nginx service
+    - name: Restart nginx service
       service:
         name: nginx
         state: restarted
