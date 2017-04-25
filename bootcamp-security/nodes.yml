@@ -2,6 +2,7 @@
   hosts: nodes
   become: True
   tasks:
+    ### ssh config file modify
     - name: Enable password authentication ssh
       replace: >-
         dest='/etc/ssh/sshd_config'
@@ -20,6 +21,7 @@
         name: ssh
         state: restarted
 
+    ### Install Packages
     - name: Install nginx
       apt:
         name: nginx
@@ -65,6 +67,7 @@
         - imagemagick
         - libsqlite3-dev
 
+    ### Set Application Code
     - name: Create Directory
       file:
         path: /var/www/app
@@ -110,7 +113,7 @@
       git:
         repo: https://github.com/nishimunea/bootcampsns.git
         dest: /var/www/app/sns
-        clone: no
+        clone: yes
         force: yes
 
     - name: Change directory owner
@@ -120,6 +123,7 @@
         group: www-data
         recurse: yes
 
+    ### Application Start Setting
     - name: Bundle Install
       shell: bundle install chdir=/var/www/app/sns
 
@@ -133,9 +137,6 @@
       copy:
         src: files/unicorn.rb
         dest: /var/www/app/sns/config/unicorn.rb
-
-    #- name: Start unicoen
-    #  shell: bundle exec unicorn_rails -c config/unicorn.rb -E production -D chdir=/var/www/app/sns
 
     - name: Copy init.d/unicorn (unicorn start shell)
       copy:
