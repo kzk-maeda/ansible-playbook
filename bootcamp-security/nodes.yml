@@ -77,7 +77,7 @@
       user:
         name: bootcamp2017
         group: www-data
-        password: bootcamp2017!!
+        password: $1$SomeSalt$1Yglpgh.Dp2rfMi/CSfGv1 #python -c 'import crypt; print crypt.crypt("bootcamp2017!!", "$1$SomeSalt$")'
 
     - name: Copy mysql.cnf
       copy:
