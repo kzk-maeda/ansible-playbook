@@ -88,7 +88,7 @@
         group: www-data
         mode: 0755
 
-    -name: Add authorized_keys to bootcamp2017
+    - name: Add authorized_keys to bootcamp2017
       copy:
         src: files/authorized_keys
         dest: /home/bootcamp2017/.ssh/authorized_keys
