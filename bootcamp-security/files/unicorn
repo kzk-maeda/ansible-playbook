@@ -34,7 +34,7 @@ stop()
 status()
 {
   if [ ! -e $PID ]; then
-    echo "$NAME not started"
+    echo "$NAME is not running"
   else
     echo "$NAME is running"
   fi
