@@ -13,7 +13,7 @@
         dest='/etc/ssh/ssh_config'
         state=present
         regexp='SendEnv LANG LC_*'
-        line=#SendEnv LANG LC_*''
+        line='#SendEnv LANG LC_*'
 
 
     - name: Install nginx
