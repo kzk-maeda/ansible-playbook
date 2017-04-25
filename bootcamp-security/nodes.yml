@@ -2,7 +2,7 @@
   hosts: nodes
   become: True
   vars:
-    inclide: vars.yml
+    include: vars.yml
   tasks:
     ### ssh config file modify
     - name: Enable password authentication ssh
