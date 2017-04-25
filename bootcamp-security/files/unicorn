@@ -31,6 +31,15 @@ stop()
   rm -f $PID
 }
 
+status()
+{
+  if [ ! -e $PID ]; then
+    echo "$NAME not started"
+  else
+    echo "$NAME is running"
+  fi
+}
+
 force_stop()
 {
   if [ ! -e $PID ]; then
@@ -65,6 +74,9 @@ case "$1" in
     ;;
   stop)
     stop
+    ;;
+  status)
+    status
     ;;
   force-stop)
     force_stop
