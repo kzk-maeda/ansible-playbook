@@ -152,4 +152,11 @@
         state: restarted
 
     - name: Start unicorn
-      shell: /etc/init.d/unicorn start
+      shell: |
+        result=$(/etc/init.d/unicorn status)
+        starting="unicorn is running"
+        stopping="unicorn is not running"
+
+        if [ "${result}" = "${stopping}" ]; then
+          /etc/init.d/unicorn start
+        fi
