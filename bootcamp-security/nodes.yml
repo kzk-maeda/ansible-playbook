@@ -152,6 +152,4 @@
         state: restarted
 
     - name: Start unicorn
-      service:
-        name: unicorn
-        state: started
+      shell: /etc/init.d/unicorn start

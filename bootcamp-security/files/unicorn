@@ -1,5 +1,3 @@
-sudo nano /etc/init.d/unicorn
-〜〜〜〜
 #!/bin/sh
 
 NAME="unicorn"
