@@ -100,6 +100,7 @@
       file:
         path: /var/www/app
         owner: www-data
+        group: www-data
         recurse: yes
 
     - name: Bundle Install
