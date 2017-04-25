@@ -1,0 +1,13 @@
+# User params
+user.name: bootcamp2017
+user.pass: $1$SomeSalt$1Yglpgh.Dp2rfMi/CSfGv1 #python -c 'import crypt; print crypt.crypt("bootcamp2017!!", "$1$SomeSalt$")'
+user.group: www-data
+user.shell: /bin/bash
+
+# Application params
+apps.root: /var/www/app
+apps.dir: /var/www/app/sns
+apps.repo: https://github.com/nishimunea/bootcampsns.git
+apps.owner: www-data
+apps.group: www-data
+apps.mode: 0755

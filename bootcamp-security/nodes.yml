@@ -1,6 +1,8 @@
 - name: Configure Bootcamp Environment 2017
   hosts: nodes
   become: True
+  vars:
+    inclide: vars.yml
   tasks:
     ### ssh config file modify
     - name: Enable password authentication ssh
@@ -70,33 +72,33 @@
     ### Set Application Code
     - name: Create Directory
       file:
-        path: /var/www/app
+        path: {{ apps.root }}
         state: directory
-        owner: www-data
-        group: www-data
-        mode: 0755
+        owner: {{ apps.owner }}
+        group: {{ apps.group }}
+        mode: {{ apps.mode }}
 
     - name: Create User (bootcamp2017)
       user:
-        name: bootcamp2017
-        groups: www-data,sudo
-        shell: /bin/bash
-        password: $1$SomeSalt$1Yglpgh.Dp2rfMi/CSfGv1 #python -c 'import crypt; print crypt.crypt("bootcamp2017!!", "$1$SomeSalt$")'
+        name: {{ user.name }}
+        groups: {{ user.group }},sudo
+        shell: {{ user.shell }}
+        password: {{ user.pass }}
 
     - name: Create bootcamp2017/.ssh directory
       file:
-        path: /home/bootcamp2017/.ssh
+        path: /home/{{ user.name }}/.ssh
         state: directory
-        owner: bootcamp2017
-        group: www-data
+        owner: {{ user.name }}
+        group: {{ user.group }}
         mode: 0755
 
     - name: Add authorized_keys to bootcamp2017
       copy:
         src: files/authorized_keys
-        dest: /home/bootcamp2017/.ssh/authorized_keys
-        owner: bootcamp2017
-        group: www-data
+        dest: /home/{{ user.name }}/.ssh/authorized_keys
+        owner: {{ user.name }}
+        group: {{ user.group }}
         mode: 0600
 
     - name: Copy mysql.cnf
@@ -111,32 +113,32 @@
 
     - name: Git clone app code
       git:
-        repo: https://github.com/nishimunea/bootcampsns.git
-        dest: /var/www/app/sns
+        repo: {{ apps.repo }}
+        dest: {{ apps.dir }}
         clone: yes
         force: yes
 
     - name: Change directory owner
       file:
-        path: /var/www/app
-        owner: www-data
-        group: www-data
+        path: {{ apps.root }}
+        owner: {{ apps.owner }}
+        group: {{ apps.group }}
         recurse: yes
 
     ### Application Start Setting
     - name: Bundle Install
-      shell: bundle install chdir=/var/www/app/sns
+      shell: bundle install chdir={{ apps.dir }}
 
     - name: Rake DB Create (ENV=production)
-      shell: rake db:create RAILS_ENV=production chdir=/var/www/app/sns
+      shell: rake db:create RAILS_ENV=production chdir={{ apps.dir }}
 
     - name: Rake DB Migrate (ENV=production)
-      shell: rake db:migrate RAILS_ENV=production chdir=/var/www/app/sns
+      shell: rake db:migrate RAILS_ENV=production chdir={{ apps.dir }}
 
     - name: Copy unicorn.rb
       copy:
         src: files/unicorn.rb
-        dest: /var/www/app/sns/config/unicorn.rb
+        dest: "{{ apps.dir }}/config/unicorn.rb"
 
     - name: Copy init.d/unicorn (unicorn start shell)
       copy:
