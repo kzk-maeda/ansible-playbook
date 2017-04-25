@@ -15,6 +15,10 @@
         regexp='SendEnv LANG LC_*'
         line='#SendEnv LANG LC_*'
 
+    - name: Restart ssh Service
+      service:
+        name: ssh
+        state: restarted
 
     - name: Install nginx
       apt:
