@@ -80,6 +80,20 @@
         shell: /bin/bash
         password: $1$SomeSalt$1Yglpgh.Dp2rfMi/CSfGv1 #python -c 'import crypt; print crypt.crypt("bootcamp2017!!", "$1$SomeSalt$")'
 
+    - name: Configure ssh setting of bootcamp2017
+      file:
+        path: /home/bootcamp2017/.ssh
+        state: directory
+        owner: bootcamp2017
+        group: www-data
+        mode: 0755
+      copy:
+        src: files/authorized_keys
+        dest: /home/bootcamp2017/.ssh/authorized_keys
+        owner: bootcamp2017
+        group: www-data
+        mode: 0600
+
     - name: Copy mysql.cnf
       copy:
         src: files/my.cnf
