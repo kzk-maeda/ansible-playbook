@@ -41,7 +41,7 @@
         state: latest
 
     - name: Install mysql packages
-      apt: name={{ item }} state=installed
+      apt: name="{{ item }}" state=installed
       with_items:
         - mysql-server
         - libmysqlclient-dev
@@ -50,7 +50,7 @@
       apt_repository: repo='ppa:brightbox/ruby-ng'
 
     - name: Install other packages
-      apt: name={{ item }} state=installed
+      apt: name="{{ item }}" state=installed
       with_items:
         - ruby2.3
         - ruby2.3-dev
@@ -72,33 +72,33 @@
     ### Set Application Code
     - name: Create Directory
       file:
-        path: {{ apps.root }}
+        path: "{{ apps.root }}"
         state: directory
-        owner: {{ apps.owner }}
-        group: {{ apps.group }}
-        mode: {{ apps.mode }}
+        owner: "{{ apps.owner }}"
+        group: "{{ apps.group }}"
+        mode: "{{ apps.mode }}"
 
     - name: Create User (bootcamp2017)
       user:
-        name: {{ user.name }}
-        groups: "{{ user.group }},sudo"
-        shell: {{ user.shell }}
-        password: {{ user.pass }}
+        name: "{{ user.name }}"
+        groups: "{{ user.group }}",sudo"
+        shell: "{{ user.shell }}"
+        password: "{{ user.pass }}"
 
     - name: Create bootcamp2017/.ssh directory
       file:
-        path: /home/{{ user.name }}/.ssh
+        path: /home/"{{ user.name }}"/.ssh
         state: directory
-        owner: {{ user.name }}
-        group: {{ user.group }}
+        owner: "{{ user.name }}"
+        group: "{{ user.group }}"
         mode: 0755
 
     - name: Add authorized_keys to bootcamp2017
       copy:
         src: files/authorized_keys
-        dest: /home/{{ user.name }}/.ssh/authorized_keys
-        owner: {{ user.name }}
-        group: {{ user.group }}
+        dest: /home/"{{ user.name }}"/.ssh/authorized_keys
+        owner: "{{ user.name }}"
+        group: "{{ user.group }}"
         mode: 0600
 
     - name: Copy mysql.cnf
@@ -113,32 +113,32 @@
 
     - name: Git clone app code
       git:
-        repo: {{ apps.repo }}
-        dest: {{ apps.dir }}
+        repo: "{{ apps.repo }}"
+        dest: "{{ apps.dir }}"
         clone: yes
         force: yes
 
     - name: Change directory owner
       file:
-        path: {{ apps.root }}
-        owner: {{ apps.owner }}
-        group: {{ apps.group }}
+        path: "{{ apps.root }}"
+        owner: "{{ apps.owner }}"
+        group: "{{ apps.group }}"
         recurse: yes
 
     ### Application Start Setting
     - name: Bundle Install
-      shell: bundle install chdir={{ apps.dir }}
+      shell: bundle install chdir="{{ apps.dir }}"
 
     - name: Rake DB Create (ENV=production)
-      shell: rake db:create RAILS_ENV=production chdir={{ apps.dir }}
+      shell: rake db:create RAILS_ENV=production chdir="{{ apps.dir }}"
 
     - name: Rake DB Migrate (ENV=production)
-      shell: rake db:migrate RAILS_ENV=production chdir={{ apps.dir }}
+      shell: rake db:migrate RAILS_ENV=production chdir="{{ apps.dir }}"
 
     - name: Copy unicorn.rb
       copy:
         src: files/unicorn.rb
-        dest: "{{ apps.dir }}/config/unicorn.rb"
+        dest: "{{ apps.dir }}"/config/unicorn.rb"
 
     - name: Copy init.d/unicorn (unicorn start shell)
       copy:
