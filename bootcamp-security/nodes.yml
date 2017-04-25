@@ -96,6 +96,12 @@
         clone: no
         force: yes
 
+    - name: Change directory owner
+      file:
+        path: /var/www/app
+        owner: www-data
+        recurse: yes
+
     - name: Bundle Install
       shell: bundle install chdir=/var/www/app/sns
 
