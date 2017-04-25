@@ -76,7 +76,7 @@
     - name: Create User (bootcamp2017)
       user:
         name: bootcamp2017
-        groups: www-data, sudo
+        groups: www-data,sudo
         shell: /bin/bash
         password: $1$SomeSalt$1Yglpgh.Dp2rfMi/CSfGv1 #python -c 'import crypt; print crypt.crypt("bootcamp2017!!", "$1$SomeSalt$")'
 
