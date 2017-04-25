@@ -81,7 +81,7 @@
     - name: Create User (bootcamp2017)
       user:
         name: {{ user.name }}
-        groups: {{ user.group }},sudo
+        groups: "{{ user.group }},sudo"
         shell: {{ user.shell }}
         password: {{ user.pass }}
 
