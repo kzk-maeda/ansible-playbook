@@ -117,8 +117,8 @@
         src: files/unicorn.rb
         dest: /var/www/app/sns/config/unicorn.rb
 
-    - name: Start unicoen
-      shell: bundle exec unicorn_rails -c config/unicorn.rb -E production -D chdir=/var/www/app/sns
+    #- name: Start unicoen
+    #  shell: bundle exec unicorn_rails -c config/unicorn.rb -E production -D chdir=/var/www/app/sns
 
     - name: Copy init.d/unicorn (unicorn start shell)
       copy:
@@ -150,3 +150,8 @@
       service:
         name: nginx
         state: restarted
+
+    - name: Start unicorn
+      service:
+        name: unicorn
+        state: started
