@@ -41,7 +41,7 @@
         state: latest
 
     - name: Install mysql packages
-      apt: name="{{ item }}" state=installed
+      apt: name={{ item }} state=installed
       with_items:
         - mysql-server
         - libmysqlclient-dev
@@ -50,7 +50,7 @@
       apt_repository: repo='ppa:brightbox/ruby-ng'
 
     - name: Install other packages
-      apt: name="{{ item }}" state=installed
+      apt: name={{ item }} state=installed
       with_items:
         - ruby2.3
         - ruby2.3-dev
