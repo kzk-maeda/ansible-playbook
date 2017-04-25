@@ -1,8 +1,8 @@
 - name: Configure Bootcamp Environment 2017
   hosts: nodes
   become: True
-  vars:
-    include: vars.yml
+  include_vars:
+    file: vars.yml
   tasks:
     ### ssh config file modify
     - name: Enable password authentication ssh
