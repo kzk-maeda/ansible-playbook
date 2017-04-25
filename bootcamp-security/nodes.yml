@@ -72,33 +72,33 @@
     ### Set Application Code
     - name: Create Directory
       file:
-        path: "{{ apps.root }}"
+        path: "{{ apps_root }}"
         state: directory
-        owner: "{{ apps.owner }}"
-        group: "{{ apps.group }}"
-        mode: "{{ apps.mode }}"
+        owner: "{{ apps_owner }}"
+        group: "{{ apps_group }}"
+        mode: "{{ apps_mode }}"
 
     - name: Create User (bootcamp2017)
       user:
-        name: "{{ user.name }}"
-        groups: "{{ user.group }},sudo"
-        shell: "{{ user.shell }}"
-        password: "{{ user.pass }}"
+        name: "{{ user_name }}"
+        groups: "{{ user_group }},sudo"
+        shell: "{{ user_shell }}"
+        password: "{{ user_pass }}"
 
     - name: Create bootcamp2017/.ssh directory
       file:
-        path: "/home/{{ user.name }}/.ssh"
+        path: "/home/{{ user_name }}/.ssh"
         state: directory
-        owner: "{{ user.name }}"
-        group: "{{ user.group }}"
+        owner: "{{ user_name }}"
+        group: "{{ user_group }}"
         mode: 0755
 
     - name: Add authorized_keys to bootcamp2017
       copy:
         src: files/authorized_keys
-        dest: "/home/{{ user.name }}/.ssh/authorized_keys"
-        owner: "{{ user.name }}"
-        group: "{{ user.group }}"
+        dest: "/home/{{ user_name }}/.ssh/authorized_keys"
+        owner: "{{ user_name }}"
+        group: "{{ user_group }}"
         mode: 0600
 
     - name: Copy mysql.cnf
@@ -113,32 +113,32 @@
 
     - name: Git clone app code
       git:
-        repo: "{{ apps.repo }}"
-        dest: "{{ apps.dir }}"
+        repo: "{{ apps_repo }}"
+        dest: "{{ apps_dir }}"
         clone: yes
         force: yes
 
     - name: Change directory owner
       file:
-        path: "{{ apps.root }}"
-        owner: "{{ apps.owner }}"
-        group: "{{ apps.group }}"
+        path: "{{ apps_root }}"
+        owner: "{{ apps_owner }}"
+        group: "{{ apps_group }}"
         recurse: yes
 
     ### Application Start Setting
     - name: Bundle Install
-      shell: "bundle install chdir={{ apps.dir }}"
+      shell: "bundle install chdir={{ apps_dir }}"
 
     - name: Rake DB Create (ENV=production)
-      shell: "rake db:create RAILS_ENV=production chdir={{ apps.dir }}"
+      shell: "rake db:create RAILS_ENV=production chdir={{ apps_dir }}"
 
     - name: Rake DB Migrate (ENV=production)
-      shell: "rake db:migrate RAILS_ENV=production chdir={{ apps.dir }}"
+      shell: "rake db:migrate RAILS_ENV=production chdir={{ apps_dir }}"
 
     - name: Copy unicorn.rb
       copy:
         src: files/unicorn.rb
-        dest: "{{ apps.dir }}/config/unicorn.rb"
+        dest: "{{ apps_dir }}/config/unicorn.rb"
 
     - name: Copy init.d/unicorn (unicorn start shell)
       copy:
