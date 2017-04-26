@@ -58,7 +58,7 @@
     - patch
     - libmysqlclient-dev
     - libmagickwand-dev
-    - imagemagick
+    #- imagemagick
     - libsqlite3-dev
 
 ### Set Application Code
