@@ -25,7 +25,7 @@
 
 - name: Add execution right to unicorn
   become: True
-    file:
+  file:
     path: /etc/init.d/unicorn
     mode: 0755
 
