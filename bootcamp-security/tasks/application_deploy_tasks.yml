@@ -1,50 +1,62 @@
 ### Application Start Setting
 - name: Bundle Install
   shell: "bundle install chdir={{ apps_dir }}"
+  become_user: {{ apps.owner }}
 
 - name: Rake DB Create (ENV=production)
   shell: "rake db:create RAILS_ENV=production chdir={{ apps_dir }}"
+  become_user: {{ apps.owner }}
 
 - name: Rake DB Migrate (ENV=production)
   shell: "rake db:migrate RAILS_ENV=production chdir={{ apps_dir }}"
+  become_user: {{ apps.owner }}
 
 - name: Copy unicorn.rb
+  become_user: {{ apps.owner }}
   copy:
     src: files/unicorn.rb
     dest: "{{ apps_dir }}/config/unicorn.rb"
 
 - name: Copy init.d/unicorn (unicorn start shell)
+  become: True
   copy:
     src: files/unicorn
     dest: /etc/init.d/unicorn
 
 - name: Add execution right to unicorn
-  file:
+  become: True
+    file:
     path: /etc/init.d/unicorn
     mode: 0755
 
 - name: Reload daemon
+  become: True
   shell: systemctl daemon-reload
 
 - name: update unicorn
+  become: True
   shell: update-rc.d unicorn defaults
 
 - name: Copy nginx config file (/etc/nginx/sites-enabled/default)
+  become: True
   copy:
     src: files/sites-enabled_default
     dest: /etc/nginx/sites-enabled/default
 
 - name: Copy nginx config file (/etc/nginx/nginx.conf)
+  become: True
   copy:
     src: files/nginx.conf
     dest: /etc/nginx/nginx.conf
 
 - name: Restart nginx service
+  become: True
   service:
     name: nginx
     state: restarted
 
 - name: Start unicorn
+  become_user: {{ apps.owner }}
   shell: |
     result=$(/etc/init.d/unicorn status)
     starting="unicorn is running"

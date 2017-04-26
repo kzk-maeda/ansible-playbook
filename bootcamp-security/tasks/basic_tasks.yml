@@ -1,11 +1,13 @@
 ### ssh config file modify
 - name: Enable password authentication ssh
+  become: True
   replace: >-
     dest='/etc/ssh/sshd_config'
     regexp='PasswordAuthentication no'
     replace='PasswordAuthentication yes'
 
 - name: Comment out ssh local configration
+  become: True
   lineinfile: >-
     dest='/etc/ssh/ssh_config'
     state=present
@@ -13,37 +15,33 @@
     line='#SendEnv LANG LC_*'
 
 - name: Restart ssh Service
+  become: True
   service:
     name: ssh
     state: restarted
 
 ### Install Packages
-- name: Install nginx
-  apt:
-    name: nginx
-    state: latest
-    update_cache: yes
+- name: Install nginx/mysql packages
+  become: True
+  apt: name={{ item }} state=installed
+  with_items:
+    - nginx
+    - php-fpm
+    - mysql-server
+    - libmysqlclient-dev
 
 - name: Service nginx enable
+  become: True
   service:
     name: nginx
     enabled: yes
 
-- name: Install php-fpm
-  apt:
-    name: php-fpm
-    state: latest
-
-- name: Install mysql packages
-  apt: name={{ item }} state=installed
-  with_items:
-    - mysql-server
-    - libmysqlclient-dev
-
 - name: Add apt repository
+  become: True
   apt_repository: repo='ppa:brightbox/ruby-ng'
 
 - name: Install other packages
+  become: True
   apt: name={{ item }} state=installed
   with_items:
     - ruby2.3
@@ -65,6 +63,7 @@
 
 ### Set Application Code
 - name: Create Directory
+  become: True
   file:
     path: "{{ apps_root }}"
     state: directory
@@ -73,6 +72,7 @@
     mode: "{{ apps_mode }}"
 
 - name: Create User (bootcamp2017)
+  become: True
   user:
     name: "{{ user_name }}"
     groups: "{{ user_group }},sudo"
@@ -80,6 +80,7 @@
     password: "{{ user_pass }}"
 
 - name: Create bootcamp2017/.ssh directory
+  become: True
   file:
     path: "/home/{{ user_name }}/.ssh"
     state: directory
@@ -88,6 +89,7 @@
     mode: 0755
 
 - name: Add authorized_keys to bootcamp2017
+  become: True
   copy:
     src: files/authorized_keys
     dest: "/home/{{ user_name }}/.ssh/authorized_keys"
@@ -96,16 +98,19 @@
     mode: 0600
 
 - name: Copy mysql.cnf
+  become: True
   copy:
     src: files/my.cnf
     dest: /etc/mysql/my.cnf
 
 - name: Restart mysql
+  become: True
   service:
     name: mysql
     state: restarted
 
 - name: Git clone app code
+  become: True
   git:
     repo: "{{ apps_repo }}"
     dest: "{{ apps_dir }}"
@@ -113,6 +118,7 @@
     force: yes
 
 - name: Change directory owner
+  become: True
   file:
     path: "{{ apps_root }}"
     owner: "{{ apps_owner }}"
