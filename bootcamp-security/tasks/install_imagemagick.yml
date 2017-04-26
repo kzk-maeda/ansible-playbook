@@ -1,10 +1,12 @@
 # Wget Installer of imagemagick
 - name: Get imagemagick Installer
+  become: True
   get_url:
     url: "{{ imag_url }}{{ imag_file }}"
     dest: "{{ imag_path }}"
 
 - name: Extract imagemagick Installer
+  become: True
   unarchive:
     src: "{{ imag_path }}/{{imag_file}}"
     dest: "{{ imag_path }}"
