@@ -10,4 +10,4 @@ apps_dir: /var/www/app/sns
 apps_repo: https://github.com/nishimunea/bootcampsns.git
 apps_owner: www-data
 apps_group: www-data
-apps_mode: 0755
+apps_mode: 0775
