@@ -28,3 +28,4 @@
   file:
     src: "{{ imag_ln_src }}"
     dest: "{{ imag_ln_dest }}"
+    state: link

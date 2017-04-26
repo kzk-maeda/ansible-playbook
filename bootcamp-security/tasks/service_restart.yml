@@ -1,0 +1,23 @@
+# Restart ssh service
+- name: Restart ssh Service
+  become: True
+  service:
+    name: ssh
+    state: restarted
+    enabled: yes
+
+# Restart nginx
+- name: Service nginx enable
+  become: True
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+# Restart mysql
+- name: Restart mysql
+  become: True
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes

@@ -37,24 +37,6 @@
   become: True
   shell: update-rc.d unicorn defaults
 
-- name: Copy nginx config file (/etc/nginx/sites-enabled/default)
-  become: True
-  copy:
-    src: files/sites-enabled_default
-    dest: /etc/nginx/sites-enabled/default
-
-- name: Copy nginx config file (/etc/nginx/nginx.conf)
-  become: True
-  copy:
-    src: files/nginx.conf
-    dest: /etc/nginx/nginx.conf
-
-- name: Restart nginx service
-  become: True
-  service:
-    name: nginx
-    state: restarted
-
 - name: Start unicorn
   become: True
   shell: |

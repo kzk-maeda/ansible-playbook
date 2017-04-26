@@ -14,12 +14,6 @@
     regexp='SendEnv LANG LC_*'
     line='#SendEnv LANG LC_*'
 
-- name: Restart ssh Service
-  become: True
-  service:
-    name: ssh
-    state: restarted
-
 ### Install Packages
 - name: Install nginx/mysql packages
   become: True
@@ -29,12 +23,6 @@
     - php-fpm
     #- mysql-server
     #- libmysqlclient-dev
-
-- name: Service nginx enable
-  become: True
-  service:
-    name: nginx
-    enabled: yes
 
 - name: Add apt repository
   become: True
@@ -103,12 +91,6 @@
     src: files/my.cnf
     dest: /etc/mysql/my.cnf
 
-- name: Restart mysql
-  become: True
-  service:
-    name: mysql
-    state: restarted
-
 - name: Git clone app code
   become: True
   git:
@@ -124,3 +106,15 @@
     owner: "{{ apps_owner }}"
     group: "{{ apps_group }}"
     recurse: yes
+
+- name: Copy nginx config file (/etc/nginx/sites-enabled/default)
+  become: True
+  copy:
+    src: files/sites-enabled_default
+    dest: /etc/nginx/sites-enabled/default
+
+- name: Copy nginx config file (/etc/nginx/nginx.conf)
+  become: True
+  copy:
+    src: files/nginx.conf
+    dest: /etc/nginx/nginx.conf
