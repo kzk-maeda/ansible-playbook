@@ -11,3 +11,9 @@ apps_repo: https://github.com/nishimunea/bootcampsns.git
 apps_owner: www-data
 apps_group: www-data
 apps_mode: 0775
+
+# Imagemagick params
+imag_url: http://www.imagemagick.org/download/releases/
+imag_path: /usr/local/src
+imag_file: ImageMagick-6.9.1-10.tar.xz
+imag_dir: ImageMagick-6.9.1-10
