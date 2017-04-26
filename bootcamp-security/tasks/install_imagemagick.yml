@@ -12,7 +12,7 @@
     dest: "{{ imag_path }}"
     remote_src: True
 
-- name: Configure Installer
+- name: Install imagemagick
   become: True
   shell: >
     {{ item }}
@@ -22,3 +22,9 @@
     - "./configure --prefix=/opt/imagemagick"
     - make
     - make install
+
+- name: Create symbolic link
+  become: True
+  file:
+    src: "{{ imag_ln_src }}"
+    dest: "{{ imag_ln_dest }}"
