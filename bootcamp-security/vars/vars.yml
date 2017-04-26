@@ -18,5 +18,5 @@ imag_path: /usr/local/src
 imag_file: ImageMagick-6.9.1-10.tar.xz
 imag_dir: ImageMagick-6.9.1-10
 imag_created_dir: /opt/imagemagick/bin
-imag_ln_dest: /opt/imagemagick/bin/convert
-imag_ln_src: /usr/local/bin/
+imag_ln_src: /opt/imagemagick/bin/convert
+imag_ln_dest: /usr/local/bin/
