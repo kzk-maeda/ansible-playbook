@@ -11,3 +11,14 @@
     src: "{{ imag_path }}/{{imag_file}}"
     dest: "{{ imag_path }}"
     remote_src: True
+
+- name: Configure Installer
+  become: True
+  shell: >
+    {{ item }}
+    chdir={{ imag_path }}/{{ imag_dir }}
+    creates={{ imag_created_dir }}
+  with_items:
+    - "./configure --prefix=/opt/imagemagick"
+    - make
+    - make install
