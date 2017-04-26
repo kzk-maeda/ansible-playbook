@@ -5,4 +5,4 @@
     - vars/vars.yml
   tasks:
     - include: tasks/basic_tasks.yml
-    - include: tasks/application_deplot_tasks.yml
+    - include: tasks/application_deploy_tasks.yml
