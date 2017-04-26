@@ -124,3 +124,9 @@
     owner: "{{ apps_owner }}"
     group: "{{ apps_group }}"
     recurse: yes
+
+- name: Change log directory permission
+  become: True
+  file:
+    path: "{{ apps_dir }}/log"
+    mode: 0777
