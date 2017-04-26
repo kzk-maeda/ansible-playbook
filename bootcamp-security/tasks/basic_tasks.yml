@@ -27,8 +27,8 @@
   with_items:
     - nginx
     - php-fpm
-    - mysql-server
-    - libmysqlclient-dev
+    #- mysql-server
+    #- libmysqlclient-dev
 
 - name: Service nginx enable
   become: True
