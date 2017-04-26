@@ -129,4 +129,5 @@
   become: True
   file:
     path: "{{ apps_dir }}/log"
+    recurse: yes
     mode: 0777
