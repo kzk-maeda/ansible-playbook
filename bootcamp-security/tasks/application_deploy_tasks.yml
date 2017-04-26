@@ -1,0 +1,55 @@
+### Application Start Setting
+- name: Bundle Install
+  shell: "bundle install chdir={{ apps_dir }}"
+
+- name: Rake DB Create (ENV=production)
+  shell: "rake db:create RAILS_ENV=production chdir={{ apps_dir }}"
+
+- name: Rake DB Migrate (ENV=production)
+  shell: "rake db:migrate RAILS_ENV=production chdir={{ apps_dir }}"
+
+- name: Copy unicorn.rb
+  copy:
+    src: files/unicorn.rb
+    dest: "{{ apps_dir }}/config/unicorn.rb"
+
+- name: Copy init.d/unicorn (unicorn start shell)
+  copy:
+    src: files/unicorn
+    dest: /etc/init.d/unicorn
+
+- name: Add execution right to unicorn
+  file:
+    path: /etc/init.d/unicorn
+    mode: 0755
+
+- name: Reload daemon
+  shell: systemctl daemon-reload
+
+- name: update unicorn
+  shell: update-rc.d unicorn defaults
+
+- name: Copy nginx config file (/etc/nginx/sites-enabled/default)
+  copy:
+    src: files/sites-enabled_default
+    dest: /etc/nginx/sites-enabled/default
+
+- name: Copy nginx config file (/etc/nginx/nginx.conf)
+  copy:
+    src: files/nginx.conf
+    dest: /etc/nginx/nginx.conf
+
+- name: Restart nginx service
+  service:
+    name: nginx
+    state: restarted
+
+- name: Start unicorn
+  shell: |
+    result=$(/etc/init.d/unicorn status)
+    starting="unicorn is running"
+    stopping="unicorn is not running"
+
+    if [ "${result}" = "${stopping}" ]; then
+      /etc/init.d/unicorn start
+    fi
