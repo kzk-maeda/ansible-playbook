@@ -4,5 +4,6 @@
   vars_files:
     - vars/vars.yml
   tasks:
-    - include: tasks/basic_tasks.yml
-    - include: tasks/application_deploy_tasks.yml
+    #- include: tasks/basic_tasks.yml
+    #- include: tasks/application_deploy_tasks.yml
+    - include: tasks/install_imagemagick.yml
