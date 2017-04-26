@@ -12,7 +12,7 @@
   become: True
 
 - name: Copy unicorn.rb
-  become_user: "{{ apps_owner }}"
+  become: True
   copy:
     src: files/unicorn.rb
     dest: "{{ apps_dir }}/config/unicorn.rb"
