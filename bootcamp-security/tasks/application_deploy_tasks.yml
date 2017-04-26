@@ -56,7 +56,7 @@
     state: restarted
 
 - name: Start unicorn
-  become_user: "{{ apps_owner }}"
+  become: True
   shell: |
     result=$(/etc/init.d/unicorn status)
     starting="unicorn is running"
