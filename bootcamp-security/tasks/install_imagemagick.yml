@@ -10,3 +10,4 @@
   unarchive:
     src: "{{ imag_path }}/{{imag_file}}"
     dest: "{{ imag_path }}"
+    remote_src: True
