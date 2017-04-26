@@ -1,18 +1,18 @@
 ### Application Start Setting
 - name: Bundle Install
   shell: "bundle install chdir={{ apps_dir }}"
-  become_user: {{ apps.owner }}
+  become_user: {{ apps_owner }}
 
 - name: Rake DB Create (ENV=production)
   shell: "rake db:create RAILS_ENV=production chdir={{ apps_dir }}"
-  become_user: {{ apps.owner }}
+  become_user: {{ apps_owner }}
 
 - name: Rake DB Migrate (ENV=production)
   shell: "rake db:migrate RAILS_ENV=production chdir={{ apps_dir }}"
-  become_user: {{ apps.owner }}
+  become_user: {{ apps_owner }}
 
 - name: Copy unicorn.rb
-  become_user: {{ apps.owner }}
+  become_user: {{ apps_owner }}
   copy:
     src: files/unicorn.rb
     dest: "{{ apps_dir }}/config/unicorn.rb"
@@ -56,7 +56,7 @@
     state: restarted
 
 - name: Start unicorn
-  become_user: {{ apps.owner }}
+  become_user: {{ apps_owner }}
   shell: |
     result=$(/etc/init.d/unicorn status)
     starting="unicorn is running"
