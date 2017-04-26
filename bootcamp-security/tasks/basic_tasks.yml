@@ -105,6 +105,7 @@
     path: "{{ apps_root }}"
     owner: "{{ apps_owner }}"
     group: "{{ apps_group }}"
+    mode: "{{ apps_mode }}"
     recurse: yes
 
 - name: Copy nginx config file (/etc/nginx/sites-enabled/default)
