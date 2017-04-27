@@ -1,3 +1,6 @@
+# Base params
+host_prefix: Node
+
 # User params
 user_name: bootcamp2017
 user_pass: $1$SomeSalt$1Yglpgh.Dp2rfMi/CSfGv1 #python -c 'import crypt; print crypt.crypt("bootcamp2017!!", "$1$SomeSalt$")'
