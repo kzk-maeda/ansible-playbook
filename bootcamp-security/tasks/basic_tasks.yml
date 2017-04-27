@@ -1,10 +1,8 @@
 ### Configure basic configration
 - name: Change Hostname
   become: True
-  hostname: name="{{ host_prefix }}{{ item.0 }}"
-  run_once: yes
-  delegate_to: "{{ item.1 }}"
-  with_indexed_items: play_hosts    
+  hostname:
+    name: "{{ inventory_hostname }}" 
 
 ### ssh config file modify
 - name: Enable password authentication ssh
